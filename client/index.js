@@ -2,6 +2,7 @@ import {
   WS_URL,
   ENTER_KEY,
   INITIAL_LAYOUT,
+  WS_METHODS,
 } from './constants';
 
 const app = document.querySelector('#app');
@@ -14,16 +15,19 @@ let words = [];
 
 
 socket.onopen = () => {
-  alert('Connected');
+  socket.send(JSON.stringify({
+    user: 'vyacheslav',
+    method: WS_METHODS.connection,
+  }));
 };
 
 socket.onmessage = ({ data }) => {
+  words = JSON.parse(data);
+
   if (words.length !== 0) {
     app.innerHTML = INITIAL_LAYOUT;
   }
 
-  alert(data);
-  words = JSON.parse(data);
 
   const sortedWords = words
     .map((word) => `
@@ -32,8 +36,6 @@ socket.onmessage = ({ data }) => {
         <hr />
       </div>
     `).join('');
-  
-  console.log(sortedWords);
 
   app.insertAdjacentHTML(
     'beforeend',
@@ -46,11 +48,11 @@ socket.onmessage = ({ data }) => {
 }
 
 const sendValue = ({ value }) => {
-  socket.send(value);
-
-  if (!value) {
-    socket.close();
-  }
+  socket.send(JSON.stringify({
+    user: 'vyacheslav',
+    method: WS_METHODS.text,
+    value: value,
+  }));
 }
 
 window.addEventListener('DOMContentLoaded', () => {

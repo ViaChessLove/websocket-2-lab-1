@@ -13,8 +13,14 @@ const INITIAL_LAYOUT = `
   </div>
 `;
 
+const WS_METHODS = {
+  text: 'text',
+  connection: 'connection',
+};
+
 export {
   ENTER_KEY,
   WS_URL,
   INITIAL_LAYOUT,
+  WS_METHODS,
 };
